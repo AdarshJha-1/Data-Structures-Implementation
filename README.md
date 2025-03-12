@@ -1,1 +1,1 @@
-##essential functionalities for each data structure
+## Data Structures Implemented from Scratch
