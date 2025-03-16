@@ -23,6 +23,11 @@ void print_array(const struct Array *array) {
 void update_array_status(struct Array *array) {
   array->is_empty = (array->size == 0);
   array->is_full = (array->size == CAPACITY);
+  if (array->is_empty) {
+    array->first_val = 0;
+    array->last_val = 0;
+    return;
+  }
   if (array->size > 0) {
     array->first_val = array->arr[0];
     array->last_val = array->arr[array->size - 1];
@@ -78,12 +83,12 @@ void insert_at_mid(struct Array *array, int value, int index) {
     printf("array is full!\n");
     return;
   }
-  if (index == array->size) {
-    insert_at_end(array, value);
-    return;
-  }
   if (index == 0) {
     insert_at_beginning(array, value);
+    return;
+  }
+  if (index == array->size) {
+    insert_at_end(array, value);
     return;
   }
   for (int i = array->size; i > index; i--) {
@@ -91,6 +96,52 @@ void insert_at_mid(struct Array *array, int value, int index) {
   }
   array->arr[index] = value;
   array->size++;
+  update_array_status(array);
+}
+
+void delete_at_beginning(struct Array *array) {
+  if (array->is_empty) {
+    printf("Array is empty\n");
+    return;
+  }
+  for (int i = 0; i < array->size - 1; i++) {
+    array->arr[i] = array->arr[i + 1];
+  }
+  array->size--;
+  update_array_status(array);
+}
+
+void delete_at_end(struct Array *array) {
+  if (array->is_empty) {
+    printf("Array is empty\n");
+    return;
+  }
+  array->size--;
+  update_array_status(array);
+}
+
+void delete_at_mid(struct Array *array, int index) {
+  if (array->is_empty) {
+    printf("Array is empty\n");
+    return;
+  }
+
+  if (index >= array->size || index < 0) {
+    printf("invalid index\n");
+    return;
+  }
+  if (index == 0) {
+    delete_at_beginning(array);
+    return;
+  }
+  if (index == array->size - 1) {
+    delete_at_end(array);
+    return;
+  }
+  for (int i = index; i < array->size - 1; i++) {
+    array->arr[i] = array->arr[i + 1];
+  }
+  array->size--;
   update_array_status(array);
 }
 
