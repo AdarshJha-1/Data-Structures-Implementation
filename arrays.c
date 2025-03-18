@@ -12,7 +12,7 @@ struct Array {
   int last_val;
 };
 
-void print_array(const struct Array *array) {
+void traverse_array(const struct Array *array) {
   printf("Array's values.\n");
   for (int i = 0; i < array->size; i++) {
     printf("%d ", array->arr[i]);
@@ -145,14 +145,56 @@ void delete_at_mid(struct Array *array, int index) {
   update_array_status(array);
 }
 
+int linearSearch(struct Array *array, int target) {
+  for (int i = 0; i < array->size; i++) {
+    if (array->arr[i] == target) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int binarySearch(struct Array *array, int target) {
+  int start = 0;
+  int end = array->size - 1;
+  while (start <= end) {
+    int mid = start + (end - start) / 2;
+    if (array->arr[mid] == target) {
+      return mid;
+    } else if (array->arr[mid] > target) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+  return -1;
+}
+
+void bubble_sort(struct Array *array) {
+  for (int i = 0; i < array->size - 1; i++) {
+    bool swapped = false;
+    for (int j = 0; j < array->size - i - 1; j++) {
+      if (array->arr[j] > array->arr[j + 1]) {
+        int temp = array->arr[j];
+        array->arr[j] = array->arr[j + 1];
+        array->arr[j + 1] = temp;
+        swapped = true;
+      }
+      if (swapped == false)
+        break;
+    }
+  }
+}
+
 int main() {
   struct Array array = {.size = 0, .is_full = false, .is_empty = true};
   create_array(&array);
-  print_array(&array);
-  insert_at_beginning(&array, 6969);
-  print_array(&array);
-  printf("%d\n", array.size);
-  insert_at_mid(&array, 33, 6);
-  print_array(&array);
+  traverse_array(&array);
+  //  insert_at_beginning(&array, 6969);
+  // traverse_array(&array);
+  // printf("%d\n", array.size);
+  // insert_at_mid(&array, 33, 6);
+  bubble_sort(&array);
+  traverse_array(&array);
   return 0;
 }
